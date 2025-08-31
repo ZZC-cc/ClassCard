@@ -222,7 +222,8 @@
         }
       
         .表单组 input, .表单组 select {
-            width: 100%;
+            width: auto;
+            max-width: 200px;
             padding: 10px;
             border: 1px solid var(--border-color);
             border-radius: 5px;
@@ -307,7 +308,7 @@
             }
             
             .星期标签 {
-                min-width: 80px;
+                min-width: 70px;
                 padding: 12px 15px;
                 font-size: 14px;
             }
@@ -387,7 +388,7 @@
             }
             
             .星期标签 {
-                min-width: 70px;
+                min-width: 60px;
                 padding: 10px 12px;
                 font-size: 12px;
             }
@@ -403,6 +404,8 @@
             .表单组 input, .表单组 select {
                 font-size: 14px;
                 padding: 8px;
+                width: auto;
+                max-width: 150px;
             }
             
             /* 手机端表格适配 */
@@ -412,14 +415,16 @@
             }
             
             .课程表格 {
-                min-width: 800px; /* 增加最小宽度以适应更多列 */
+                width: 100%;
                 font-size: 11px;
+                table-layout: fixed;
             }
             
             .课程表格 th,
             .课程表格 td {
-                padding: 6px 4px;
-                font-size: 11px;
+                padding: 4px 2px;
+                font-size: 10px;
+                word-wrap: break-word;
             }
             
             .课程单元格 .科目标签 {
@@ -510,8 +515,8 @@
         }
         
         .课程表格 .课程单元格 {
-            min-width: 120px;
-            padding: 8px;
+            min-width: 60px;
+            padding: 6px;
         }
         
         .课程单元格 .科目标签 {
