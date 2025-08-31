@@ -42,22 +42,49 @@
         }
       
         .课程表标题 {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 25px;
+            padding: 30px 25px;
             text-align: center;
-            border-radius: 12px 12px 0 0;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+      
+        .课程表标题::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
         }
       
         .课程表标题 h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
         }
       
         .课程表标题 p {
-            opacity: 0.9;
-            font-size: 16px;
+            opacity: 0.95;
+            font-size: 17px;
+            font-weight: 400;
+            position: relative;
+            z-index: 2;
+        }
+      
+        @keyframes shimmer {
+            0% { transform: rotate(45deg) translateX(-100%); }
+            100% { transform: rotate(45deg) translateX(100%); }
         }
       
         .功能栏 {
@@ -71,6 +98,148 @@
         .功能栏 > div {
             display: flex;
             gap: 15px;
+        }
+        
+        /* Todo 视图样式 */
+        .todo视图 {
+            display: none;
+        }
+        
+        .todo容器 {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .todo表单 {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .todo表单组 {
+            margin-bottom: 15px;
+        }
+        
+        .todo表单组 label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .todo表单组 input,
+        .todo表单组 textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .todo表单组 textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .todo列表 {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .todo卡片 {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .todo卡片.过期 {
+            border-left-color: #dc3545;
+            opacity: 0.7;
+        }
+        
+        .todo卡片.已完成 {
+            border-left-color: #28a745;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .todo卡片.已完成 .todo删除按钮 {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+        
+        .todo标题 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .todo内容 {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .todo时间 {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 12px;
+        }
+        
+        .todo操作 {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .todo按钮 {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .todo完成按钮 {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .todo删除按钮 {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        /* 日期分组样式 */
+        .todo日期分组 {
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .todo日期标题 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .todo日期内容 {
+            padding: 16px;
+            background: #f8fafc;
+            display: grid;
+            gap: 12px;
+        }
+        
+        .todo日期内容 .todo卡片 {
+            margin: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
       
         .按钮 {
@@ -115,7 +284,16 @@
             min-width: 120px;
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
+            font-weight: 600;
         }
+        
+        .星期一 { background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); color: #c62828; }
+        .星期二 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #1565c0; }
+        .星期三 { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #2e7d32; }
+        .星期四 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #ff8f00; }
+        .星期五 { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); color: #558b2f; }
+        .星期六 { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); color: #7b1fa2; }
+        .星期日 { background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%); color: #ad1457; }
       
         .星期标签:hover {
             background-color: #f0f5ff;
@@ -129,34 +307,46 @@
       
         .课程内容 {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
         }
       
         .课程卡片 {
-            background: var(--card-bg);
-            border-radius: 10px;
+            background: #ffffff;
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
         }
       
         .课程卡片:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
       
         .课程头 {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
         }
       
         .课程时间 {
-            font-weight: bold;
-            color: var(--primary-color);
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid #e2e8f0;
+            letter-spacing: 0.3px;
         }
       
         .操作按钮 {
@@ -178,29 +368,51 @@
         }
       
         .课程详情 {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
       
         .课程科目 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 8px;
         }
       
-        .语文 { background-color: var(--语文-color); color: #c62828; }
-        .音乐 { background-color: var(--音乐-color); color: #7b1fa2; }
-        .科学 { background-color: var(--科学-color); color: #1565c0; }
-        .美术 { background-color: var(--美术-color); color: #ff8f00; }
-        .劳动 { background-color: var(--劳动-color); color: #2e7d32; }
-        .综合 { background-color: var(--综合-color); color: #d84315; }
-        .值日 { background-color: var(--值日-color); color: #bf360c; }
+        .课程科目::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), transparent);
+            border-radius: 2px;
+        }
+      
+        .语文::before { content: '📚 '; }
+        .音乐::before { content: '🎵 '; }
+        .科学::before { content: '🔬 '; }
+        .美术::before { content: '🎨 '; }
+        .劳动::before { content: '🧹 '; }
+        .综合::before { content: '📝 '; }
+        .值日::before { content: '🧽 '; }
+        
+        .语文 { color: #c62828; }
+        .音乐 { color: #7b1fa2; }
+        .科学 { color: #1565c0; }
+        .美术 { color: #ff8f00; }
+        .劳动 { color: #2e7d32; }
+        .综合 { color: #d84315; }
+        .值日 { color: #bf360c; }
       
         .课程信息 {
             color: #666;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            line-height: 1.4;
         }
       
         .编辑表单 {
@@ -315,25 +527,29 @@
             
             .课程内容 {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 12px;
             }
             
             .课程卡片 {
-                padding: 15px;
+                padding: 16px;
+                border-radius: 8px;
+                backdrop-filter: none;
             }
             
             .课程头 {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
             }
-            
+          
             .操作按钮 {
-                align-self: flex-end;
+                margin-left: auto;
             }
             
             .课程科目 {
                 font-size: 16px;
+                padding: 6px 12px;
+                border-radius: 10px;
             }
             
             .课程信息 {
@@ -393,8 +609,23 @@
                 font-size: 12px;
             }
             
+            .课程内容 {
+                gap: 8px;
+            }
+            
             .课程卡片 {
                 padding: 12px;
+                border-radius: 6px;
+            }
+            
+            .课程头 {
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+            }
+          
+            .操作按钮 {
+                margin-left: auto;
             }
             
             .课程科目 {
@@ -545,8 +776,8 @@
 <body>
     <div class="课程表容器">
         <div class="课程表标题">
-            <h1>六年级课程表</h1>
-            <p>可编辑的个人课程表 - 您的修改会自动保存</p>
+            <h1>优秀教师的自我修养</h1>
+            <p>可编辑的个人课程表、常用工具</p>
         </div>
       
         <div class="功能栏">
@@ -555,7 +786,7 @@
             </div>
             <div>
                 <button class="按钮 次按钮" id="重置课程">重置课程表</button>
-                <button class="按钮 次按钮" id="导出课程">导出课程表</button>
+                <button class="按钮 次按钮" id="todo视图">Todo提醒</button>
             </div>
         </div>
         
@@ -563,6 +794,7 @@
         <div class="视图切换">
             <button class="视图按钮 active" id="卡片视图">卡片视图</button>
             <button class="视图按钮" id="表格视图">表格视图</button>
+            <button class="视图按钮" id="todo视图按钮">Todo提醒</button>
         </div>
         
         <div class="星期导航">
@@ -584,12 +816,36 @@
                 <!-- 表格内容将通过JavaScript动态生成 -->
             </table>
         </div>
+        
+        <!-- Todo 视图 -->
+        <div id="todo视图容器" class="todo视图">
+            <div class="todo容器">
+                <div class="todo表单">
+                    <div class="todo表单组">
+                        <label for="todo标题">提醒标题</label>
+                        <input type="text" id="todo标题" placeholder="输入提醒标题">
+                    </div>
+                    <div class="todo表单组">
+                        <label for="todo内容">提醒内容</label>
+                        <textarea id="todo内容" placeholder="输入提醒内容"></textarea>
+                    </div>
+                    <div class="todo表单组">
+                        <label for="todo时间">提醒时间</label>
+                        <input type="datetime-local" id="todo时间">
+                    </div>
+                    <button class="按钮 主按钮" onclick="添加Todo()">添加提醒</button>
+                </div>
+                <div id="todo列表" class="todo列表"></div>
+            </div>
+        </div>
     </div>
 
     <script>
         // 全局变量
         let 当前视图 = '卡片';
         let 当前筛选星期 = '全部';
+        let todo数据 = [];
+        let todo定时器 = null;
         
         // 初始课程数据
         let 课程数据 = [
@@ -614,6 +870,13 @@
             if (保存的数据) {
                 课程数据 = JSON.parse(保存的数据);
             }
+            
+            // 加载todo数据
+            const 保存的todo数据 = localStorage.getItem('todo数据');
+            if (保存的todo数据) {
+                todo数据 = JSON.parse(保存的todo数据);
+            }
+            
             渲染当前视图();
         }
         
@@ -621,8 +884,10 @@
         function 渲染当前视图() {
             if (当前视图 === '卡片') {
                 渲染课程列表(当前筛选星期);
-            } else {
+            } else if (当前视图 === '表格') {
                 渲染课程表格(当前筛选星期);
+            } else if (当前视图 === 'todo') {
+                渲染Todo列表(当前筛选星期);
             }
         }
         
@@ -633,10 +898,12 @@
             // 更新按钮状态
             document.getElementById('卡片视图').classList.toggle('active', 视图类型 === '卡片');
             document.getElementById('表格视图').classList.toggle('active', 视图类型 === '表格');
+            document.getElementById('todo视图').classList.toggle('active', 视图类型 === 'todo');
             
             // 显示/隐藏对应的容器
             document.getElementById('课程列表').style.display = 视图类型 === '卡片' ? 'grid' : 'none';
             document.getElementById('课程表格容器').style.display = 视图类型 === '表格' ? 'block' : 'none';
+            document.getElementById('todo视图容器').style.display = 视图类型 === 'todo' ? 'block' : 'none';
             
             // 渲染当前视图
             渲染当前视图();
@@ -645,6 +912,11 @@
         // 保存数据到本地存储
         function 保存课程数据() {
             localStorage.setItem('课程表数据', JSON.stringify(课程数据));
+        }
+        
+        // 保存todo数据到本地存储
+        function 保存Todo数据() {
+            localStorage.setItem('todo数据', JSON.stringify(todo数据));
         }
 
         // 渲染课程列表
@@ -1016,10 +1288,188 @@
             导出链接.click();
         }
 
+        /* Todo 功能 */
+        
+        // 添加Todo
+        function 添加Todo() {
+            const 标题 = document.getElementById('todo标题').value.trim();
+            const 内容 = document.getElementById('todo内容').value.trim();
+            const 时间 = document.getElementById('todo时间').value;
+            
+            if (!标题 || !时间) {
+                alert('请填写标题和提醒时间');
+                return;
+            }
+            
+            const 时间对象 = new Date(时间);
+            const 星期几 = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][时间对象.getDay()];
+            
+            const 新todo = {
+                id: Date.now(),
+                标题: 标题,
+                内容: 内容,
+                时间: 时间对象.getTime(),
+                星期几: 星期几,
+                已完成: false,
+                已提醒: false
+            };
+            
+            todo数据.push(新todo);
+            保存Todo数据();
+            渲染Todo列表();
+            
+            // 清空表单
+            document.getElementById('todo标题').value = '';
+            document.getElementById('todo内容').value = '';
+            document.getElementById('todo时间').value = '';
+            
+            // 启动定时器检查
+            启动Todo定时器();
+        }
+        
+        // 渲染Todo列表（按日期分组）
+        function 渲染Todo列表(筛选星期 = '全部') {
+            const todo列表 = document.getElementById('todo列表');
+            const 当前时间 = Date.now();
+            
+            if (todo数据.length === 0) {
+                todo列表.innerHTML = '<div class="空状态">暂无提醒事项</div>';
+                return;
+            }
+            
+            // 按时间排序
+            let 排序数据 = [...todo数据].sort((a, b) => a.时间 - b.时间);
+            
+            // 星期筛选
+            if (筛选星期 !== '全部') {
+                排序数据 = 排序数据.filter(todo => todo.星期几 === 筛选星期);
+            }
+            
+            // 按日期分组
+            const 分组数据 = {};
+            排序数据.forEach(todo => {
+                const 日期 = new Date(todo.时间).toLocaleDateString('zh-CN');
+                if (!分组数据[日期]) {
+                    分组数据[日期] = [];
+                }
+                分组数据[日期].push(todo);
+            });
+            
+            let html = '';
+            
+            // 按日期顺序显示分组
+            Object.keys(分组数据).sort((a, b) => new Date(a) - new Date(b)).forEach(日期 => {
+                html += `
+                    <div class="todo日期分组">
+                        <div class="todo日期标题">📅 ${日期}</div>
+                        <div class="todo日期内容">
+                `;
+                
+                分组数据[日期].forEach(todo => {
+                    const 时间 = new Date(todo.时间);
+                    const 是否过期 = todo.时间 < 当前时间 && !todo.已完成;
+                    const 是否已完成 = todo.已完成;
+                    
+                    html += `
+                        <div class="todo卡片 ${是否过期 ? '过期' : ''} ${是否已完成 ? '已完成' : ''}" data-id="${todo.id}" data-星期="${todo.星期几}">
+                            <div class="todo标题">${todo.标题}</div>
+                            ${todo.内容 ? `<div class="todo内容">${todo.内容}</div>` : ''}
+                            <div class="todo时间">
+                                📅 ${todo.星期几} ⏰ ${时间.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}
+                                ${是否过期 ? ' (已过期)' : ''}
+                                ${todo.已提醒 ? ' 🔔' : ''}
+                            </div>
+                            <div class="todo操作">
+                                ${!是否已完成 ? `
+                                    <button class="todo按钮 todo完成按钮" onclick="完成Todo(${todo.id})">✅ 完成</button>
+                                ` : ''}
+                                <button class="todo按钮 todo删除按钮" onclick="删除Todo(${todo.id})">🗑️ 删除</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            todo列表.innerHTML = html;
+        }
+        
+        // 完成Todo
+        function 完成Todo(id) {
+            const todo = todo数据.find(t => t.id === id);
+            if (todo) {
+                todo.已完成 = true;
+                保存Todo数据();
+                渲染Todo列表();
+            }
+        }
+        
+        // 删除Todo
+        function 删除Todo(id) {
+            if (confirm('确定要删除这个提醒吗？')) {
+                todo数据 = todo数据.filter(t => t.id !== id);
+                保存Todo数据();
+                渲染Todo列表();
+            }
+        }
+        
+        // 保存Todo数据到本地存储
+        function 保存Todo数据() {
+            localStorage.setItem('todo数据', JSON.stringify(todo数据));
+        }
+        
+        // 发送Bard提醒
+        async function 发送Bard提醒(标题, 内容) {
+            try {
+                const 推送内容 = 内容 ? `${标题}\n${内容}` : 标题;
+                const 编码内容 = encodeURIComponent(推送内容);
+                const url = `https://api.day.app/psWrS4zi9b9odEuEJvfe8b/${encodeURIComponent(标题)}/${编码内容}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    console.log('Bard提醒发送成功');
+                } else {
+                    console.error('Bard提醒发送失败:', response.status);
+                }
+            } catch (error) {
+                console.error('发送提醒时出错:', error);
+            }
+        }
+        
+        // 启动Todo定时器
+        function 启动Todo定时器() {
+            if (todo定时器) {
+                clearInterval(todo定时器);
+            }
+            
+            todo定时器 = setInterval(() => {
+                const 当前时间 = Date.now();
+                
+                todo数据.forEach(todo => {
+                    if (!todo.已完成 && !todo.已提醒 && todo.时间 <= 当前时间 + 60000) {
+                        // 在提醒时间前后1分钟内发送提醒
+                        发送Bard提醒(todo.标题, todo.内容);
+                        todo.已提醒 = true;
+                        保存Todo数据();
+                    }
+                });
+                
+                渲染Todo列表();
+            }, 30000); // 每30秒检查一次
+        }
+        
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
             加载课程数据();
             渲染当前视图();
+            启动Todo定时器();
             
             // 添加事件监听器
             document.getElementById('添加课程').addEventListener('click', function() {
@@ -1031,7 +1481,6 @@
                 }
             });
             document.getElementById('重置课程').addEventListener('click', 重置课程表);
-            document.getElementById('导出课程').addEventListener('click', 导出课程表);
             
             // 视图切换按钮
             document.getElementById('卡片视图').addEventListener('click', function() {
@@ -1039,6 +1488,12 @@
             });
             document.getElementById('表格视图').addEventListener('click', function() {
                 切换视图('表格');
+            });
+            document.getElementById('todo视图按钮').addEventListener('click', function() {
+                切换视图('todo');
+            });
+            document.getElementById('todo视图').addEventListener('click', function() {
+                切换视图('todo');
             });
             
             // 星期筛选
