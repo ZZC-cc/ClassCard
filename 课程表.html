@@ -44,10 +44,10 @@
         .课程表标题 {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px 25px;
+            padding: 20px 25px;
             text-align: center;
             border-radius: 16px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
@@ -90,7 +90,7 @@
         .功能栏 {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
             gap: 20px;
         }
@@ -782,11 +782,10 @@
       
         <div class="功能栏">
             <div>
-                <button class="按钮 主按钮" id="添加课程">添加新课程</button>
+                <!-- 添加新课程按钮已删除 -->
             </div>
             <div>
-                <button class="按钮 次按钮" id="重置课程">重置课程表</button>
-                <button class="按钮 次按钮" id="todo视图">Todo提醒</button>
+                <!-- Todo提醒按钮已删除 -->
             </div>
         </div>
         
@@ -795,6 +794,7 @@
             <button class="视图按钮 active" id="卡片视图">卡片视图</button>
             <button class="视图按钮" id="表格视图">表格视图</button>
             <button class="视图按钮" id="todo视图按钮">Todo提醒</button>
+            <!-- <button class="视图按钮" onclick="重置课程表()">重置课程表</button> -->
         </div>
         
         <div class="星期导航">
@@ -898,7 +898,7 @@
             // 更新按钮状态
             document.getElementById('卡片视图').classList.toggle('active', 视图类型 === '卡片');
             document.getElementById('表格视图').classList.toggle('active', 视图类型 === '表格');
-            document.getElementById('todo视图').classList.toggle('active', 视图类型 === 'todo');
+            document.getElementById('todo视图按钮').classList.toggle('active', 视图类型 === 'todo');
             
             // 显示/隐藏对应的容器
             document.getElementById('课程列表').style.display = 视图类型 === '卡片' ? 'grid' : 'none';
@@ -1471,17 +1471,6 @@
             渲染当前视图();
             启动Todo定时器();
             
-            // 添加事件监听器
-            document.getElementById('添加课程').addEventListener('click', function() {
-                if (当前视图 === '表格') {
-                    切换视图('卡片'); // 切换到卡片视图再显示添加表单
-                    setTimeout(显示添加课程表单, 300);
-                } else {
-                    显示添加课程表单();
-                }
-            });
-            document.getElementById('重置课程').addEventListener('click', 重置课程表);
-            
             // 视图切换按钮
             document.getElementById('卡片视图').addEventListener('click', function() {
                 切换视图('卡片');
@@ -1490,9 +1479,6 @@
                 切换视图('表格');
             });
             document.getElementById('todo视图按钮').addEventListener('click', function() {
-                切换视图('todo');
-            });
-            document.getElementById('todo视图').addEventListener('click', function() {
                 切换视图('todo');
             });
             
