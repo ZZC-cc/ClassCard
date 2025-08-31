@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可编辑课程表</title>
+    <style>
+        :root {
+            --primary-color: #4b6cb7;
+            --secondary-color: #182848;
+            --light-bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --语文-color: #ffebee;
+            --音乐-color: #f3e5f5;
+            --科学-color: #e3f2fd;
+            --美术-color: #fff8e1;
+            --劳动-color: #e8f5e9;
+            --综合-color: #fbe9e7;
+            --值日-color: #ffccbc;
+            --上午-color: #fffbeb;
+            --下午-color: #f0fdf4;
+        }
+      
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+      
+        body {
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+      
+        .课程表容器 {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+      
+        .课程表标题 {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 20px;
+        }
+      
+        .课程表标题 h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+      
+        .课程表标题 p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+      
+        .功能栏 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+      
+        .按钮 {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+      
+        .主按钮 {
+            background-color: var(--primary-color);
+            color: white;
+        }
+      
+        .次按钮 {
+            background-color: #6c757d;
+            color: white;
+        }
+      
+        .按钮:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+      
+        .星期导航 {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+      
+        .星期标签 {
+            padding: 15px 20px;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+      
+        .星期标签:hover {
+            background-color: #f0f5ff;
+        }
+      
+        .星期标签.活跃 {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+      
+        .课程内容 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+      
+        .课程卡片 {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+      
+        .课程卡片:hover {
+            transform: translateY(-5px);
+        }
+      
+        .课程头 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+      
+        .课程时间 {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+      
+        .操作按钮 {
+            display: flex;
+            gap: 10px;
+        }
+      
+        .图标按钮 {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+      
+        .图标按钮:hover {
+            color: var(--primary-color);
+        }
+      
+        .课程详情 {
+            margin-bottom: 15px;
+        }
+      
+        .课程科目 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+      
+        .语文 { background-color: var(--语文-color); color: #c62828; }
+        .音乐 { background-color: var(--音乐-color); color: #7b1fa2; }
+        .科学 { background-color: var(--科学-color); color: #1565c0; }
+        .美术 { background-color: var(--美术-color); color: #ff8f00; }
+        .劳动 { background-color: var(--劳动-color); color: #2e7d32; }
+        .综合 { background-color: var(--综合-color); color: #d84315; }
+        .值日 { background-color: var(--值日-color); color: #bf360c; }
+      
+        .课程信息 {
+            color: #666;
+            margin-bottom: 5px;
+        }
+      
+        .编辑表单 {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+      
+        .表单组 {
+            margin-bottom: 15px;
+        }
+      
+        .表单组 label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+      
+        .表单组 input, .表单组 select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+      
+        .表单按钮 {
+            display: flex;
+            gap: 10px;
+        }
+      
+        .空状态 {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            grid-column: 1 / -1;
+        }
+      
+        .新增课程卡片 {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px dashed var(--border-color);
+        }
+      
+        .新增课程卡片:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+      
+        .新增图标 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+      
+        @media (max-width: 768px) {
+            .课程内容 {
+                grid-template-columns: 1fr;
+            }
+          
+            .功能栏 {
+                flex-direction: column;
+            }
+          
+            .星期导航 {
+                overflow-x: scroll;
+            }
+          
+            .星期标签 {
+                min-width: 100px;
+            }
+        }
+      
+        /* 动画效果 */
+        @keyframes 淡入 {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .课程卡片 {
+            animation: 淡入 0.5s ease forwards;
+        }
+        
+        /* 表格视图样式 */
+        .视图切换 {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .视图按钮 {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+        
+        .视图按钮.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .课程表格容器 {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+            display: none;
+        }
+        
+        .课程表格 {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .课程表格 th,
+        .课程表格 td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .课程表格 th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .课程表格 tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .课程表格 tr:hover {
+            background-color: #f0f5ff;
+        }
+        
+        .课程表格 .课程单元格 {
+            min-width: 120px;
+            padding: 8px;
+        }
+        
+        .课程单元格 .科目标签 {
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+        
+        .课程单元格 .班级信息 {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .课程单元格 .教师信息 {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .空单元格 {
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="课程表容器">
+        <div class="课程表标题">
+            <h1>六年级课程表</h1>
+            <p>可编辑的个人课程表 - 您的修改会自动保存</p>
+        </div>
+      
+        <div class="功能栏">
+            <div>
+                <button class="按钮 主按钮" id="添加课程">添加新课程</button>
+            </div>
+            <div>
+                <button class="按钮 次按钮" id="重置课程">重置课程表</button>
+                <button class="按钮 次按钮" id="导出课程">导出课程表</button>
+            </div>
+        </div>
+        
+        <!-- 视图切换按钮 -->
+        <div class="视图切换">
+            <button class="视图按钮 active" id="卡片视图">卡片视图</button>
+            <button class="视图按钮" id="表格视图">表格视图</button>
+        </div>
+        
+        <div class="星期导航">
+            <div class="星期标签 活跃" data-星期="全部">全部课程</div>
+            <div class="星期标签" data-星期="周一">周一</div>
+            <div class="星期标签" data-星期="周二">周二</div>
+            <div class="星期标签" data-星期="周三">周三</div>
+            <div class="星期标签" data-星期="周四">周四</div>
+            <div class="星期标签" data-星期="周五">周五</div>
+        </div>
+      
+        <div class="课程内容" id="课程列表">
+            <!-- 课程卡片将通过JavaScript动态生成 -->
+        </div>
+        
+        <!-- 课程表格容器 -->
+        <div class="课程表格容器" id="课程表格容器">
+            <table class="课程表格" id="课程表格">
+                <!-- 表格内容将通过JavaScript动态生成 -->
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let 当前视图 = '卡片';
+        let 当前筛选星期 = '全部';
+        
+        // 初始课程数据
+        let 课程数据 = [
+            { 星期: '周一', 节次: '第3节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+            { 星期: '周一', 节次: '第4节（上午）', 班级: '六2', 科目: '音乐', 教师: '薇' },
+            { 星期: '周二', 节次: '第1节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+            { 星期: '周二', 节次: '第3节（上午）', 班级: '六1', 科目: '科学', 教师: '薇' },
+            { 星期: '周三', 节次: '值日', 班级: '', 科目: '值日', 教师: '' },
+            { 星期: '周三', 节次: '第2节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+            { 星期: '周三', 节次: '第4节（上午）', 班级: '六1', 科目: '美术', 教师: '薇' },
+            { 星期: '周三', 节次: '第6节（下午）', 班级: '六1', 科目: '科学', 教师: '薇' },
+            { 星期: '周四', 节次: '第1节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+            { 星期: '周四', 节次: '第3节（上午）', 班级: '六1', 科目: '劳动', 教师: '薇' },
+            { 星期: '周四', 节次: '第5节（下午）', 班级: '六1', 科目: '综合', 教师: '薇' },
+            { 星期: '周五', 节次: '第2节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+            { 星期: '周五', 节次: '第5节（下午）', 班级: '六1', 科目: '语文', 教师: '薇' }
+        ];
+
+        // 从本地存储加载数据
+        function 加载课程数据() {
+            const 保存的数据 = localStorage.getItem('课程表数据');
+            if (保存的数据) {
+                课程数据 = JSON.parse(保存的数据);
+            }
+            渲染当前视图();
+        }
+        
+        // 渲染当前视图（卡片或表格）
+        function 渲染当前视图() {
+            if (当前视图 === '卡片') {
+                渲染课程列表(当前筛选星期);
+            } else {
+                渲染课程表格(当前筛选星期);
+            }
+        }
+        
+        // 切换视图
+        function 切换视图(视图类型) {
+            当前视图 = 视图类型;
+            
+            // 更新按钮状态
+            document.getElementById('卡片视图').classList.toggle('active', 视图类型 === '卡片');
+            document.getElementById('表格视图').classList.toggle('active', 视图类型 === '表格');
+            
+            // 显示/隐藏对应的容器
+            document.getElementById('课程列表').style.display = 视图类型 === '卡片' ? 'grid' : 'none';
+            document.getElementById('课程表格容器').style.display = 视图类型 === '表格' ? 'block' : 'none';
+            
+            // 渲染当前视图
+            渲染当前视图();
+        }
+
+        // 保存数据到本地存储
+        function 保存课程数据() {
+            localStorage.setItem('课程表数据', JSON.stringify(课程数据));
+        }
+
+        // 渲染课程列表
+        function 渲染课程列表(筛选星期 = '全部') {
+            当前筛选星期 = 筛选星期;
+            const 课程列表 = document.getElementById('课程列表');
+            课程列表.innerHTML = '';
+          
+            // 添加新建课程卡片
+            const 新增卡片 = document.createElement('div');
+            新增卡片.className = '新增课程卡片';
+            新增卡片.innerHTML = `
+                <div class="新增图标">+</div>
+                <div>添加新课程</div>
+            `;
+            新增卡片.addEventListener('click', 显示添加课程表单);
+            课程列表.appendChild(新增卡片);
+          
+            const 筛选后课程 = 筛选星期 === '全部' 
+                ? 课程数据 
+                : 课程数据.filter(课程 => 课程.星期 === 筛选星期);
+          
+            if (筛选后课程.length === 0) {
+                const 空状态 = document.createElement('div');
+                空状态.className = '空状态';
+                空状态.textContent = '该日期没有课程安排';
+                课程列表.appendChild(空状态);
+                return;
+            }
+          
+            筛选后课程.forEach((课程, 索引) => {
+                const 课程卡片 = document.createElement('div');
+                课程卡片.className = '课程卡片';
+                课程卡片.innerHTML = `
+                    <div class="课程头">
+                        <div class="课程时间">${课程.星期} | ${课程.节次}</div>
+                        <div class="操作按钮">
+                            <button class="图标按钮" onclick="编辑课程(${索引})">✏️</button>
+                            <button class="图标按钮" onclick="删除课程(${索引})">❌</button>
+                        </div>
+                    </div>
+                    <div class="课程详情">
+                        <div class="课程科目 ${课程.科目}">${课程.科目}</div>
+                        <div class="课程信息">班级: ${课程.班级 || '无'}</div>
+                        <div class="课程信息">教师: ${课程.教师 || '无'}</div>
+                    </div>
+                    <div class="编辑表单" id="编辑表单-${索引}">
+                        <div class="表单组">
+                            <label>星期</label>
+                            <select id="编辑-星期-${索引}">
+                                <option value="周一" ${课程.星期 === '周一' ? 'selected' : ''}>周一</option>
+                                <option value="周二" ${课程.星期 === '周二' ? 'selected' : ''}>周二</option>
+                                <option value="周三" ${课程.星期 === '周三' ? 'selected' : ''}>周三</option>
+                                <option value="周四" ${课程.星期 === '周四' ? 'selected' : ''}>周四</option>
+                                <option value="周五" ${课程.星期 === '周五' ? 'selected' : ''}>周五</option>
+                            </select>
+                        </div>
+                        <div class="表单组">
+                            <label>节次</label>
+                            <input type="text" id="编辑-节次-${索引}" value="${课程.节次}">
+                        </div>
+                        <div class="表单组">
+                            <label>班级</label>
+                            <input type="text" id="编辑-班级-${索引}" value="${课程.班级}">
+                        </div>
+                        <div class="表单组">
+                            <label>科目</label>
+                            <select id="编辑-科目-${索引}">
+                                <option value="语文" ${课程.科目 === '语文' ? 'selected' : ''}>语文</option>
+                                <option value="音乐" ${课程.科目 === '音乐' ? 'selected' : ''}>音乐</option>
+                                <option value="科学" ${课程.科目 === '科学' ? 'selected' : ''}>科学</option>
+                                <option value="美术" ${课程.科目 === '美术' ? 'selected' : ''}>美术</option>
+                                <option value="劳动" ${课程.科目 === '劳动' ? 'selected' : ''}>劳动</option>
+                                <option value="综合" ${课程.科目 === '综合' ? 'selected' : ''}>综合</option>
+                                <option value="值日" ${课程.科目 === '值日' ? 'selected' : ''}>值日</option>
+                            </select>
+                        </div>
+                        <div class="表单组">
+                            <label>教师</label>
+                            <input type="text" id="编辑-教师-${索引}" value="${课程.教师}">
+                        </div>
+                        <div class="表单按钮">
+                            <button class="按钮 主按钮" onclick="保存编辑(${索引})">保存</button>
+                            <button class="按钮 次按钮" onclick="取消编辑(${索引})">取消</button>
+                        </div>
+                    </div>
+                `;
+                课程列表.appendChild(课程卡片);
+            });
+        }
+
+        // 显示添加课程表单
+        function 显示添加课程表单() {
+            const 表单HTML = `
+                <div class="课程卡片">
+                    <div class="课程头">
+                        <div class="课程时间">添加新课程</div>
+                    </div>
+                    <div class="编辑表单" style="display: block;">
+                        <div class="表单组">
+                            <label>星期</label>
+                            <select id="新增-星期">
+                                <option value="周一">周一</option>
+                                <option value="周二">周二</option>
+                                <option value="周三">周三</option>
+                                <option value="周四">周四</option>
+                                <option value="周五">周五</option>
+                            </select>
+                        </div>
+                        <div class="表单组">
+                            <label>节次</label>
+                            <input type="text" id="新增-节次" placeholder="例如：第1节（上午）">
+                        </div>
+                        <div class="表单组">
+                            <label>班级</label>
+                            <input type="text" id="新增-班级" placeholder="例如：六1">
+                        </div>
+                        <div class="表单组">
+                            <label>科目</label>
+                            <select id="新增-科目">
+                                <option value="语文">语文</option>
+                                <option value="音乐">音乐</option>
+                                <option value="科学">科学</option>
+                                <option value="美术">美术</option>
+                                <option value="劳动">劳动</option>
+                                <option value="综合">综合</option>
+                                <option value="值日">值日</option>
+                            </select>
+                        </div>
+                        <div class="表单组">
+                            <label>教师</label>
+                            <input type="text" id="新增-教师" placeholder="例如：薇">
+                        </div>
+                        <div class="表单按钮">
+                            <button class="按钮 主按钮" onclick="添加课程()">添加</button>
+                            <button class="按钮 次按钮" onclick="取消添加()">取消</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const 课程列表 = document.getElementById('课程列表');
+            课程列表.innerHTML = 表单HTML + 课程列表.innerHTML;
+        }
+
+        // 添加新课程
+        function 添加课程() {
+            const 新课程 = {
+                星期: document.getElementById('新增-星期').value,
+                节次: document.getElementById('新增-节次').value,
+                班级: document.getElementById('新增-班级').value,
+                科目: document.getElementById('新增-科目').value,
+                教师: document.getElementById('新增-教师').value
+            };
+            
+            if (!新课程.节次) {
+                alert('请输入节次信息');
+                return;
+            }
+            
+            课程数据.push(新课程);
+            保存课程数据();
+            渲染课程列表();
+        }
+
+        // 取消添加
+        function 取消添加() {
+            渲染课程列表();
+        }
+
+        // 编辑课程
+        function 编辑课程(索引) {
+            // 隐藏所有编辑表单
+            document.querySelectorAll('.编辑表单').forEach(表单 => {
+                表单.style.display = 'none';
+            });
+            
+            // 显示当前编辑表单
+            const 编辑表单 = document.getElementById(`编辑表单-${索引}`);
+            编辑表单.style.display = 'block';
+        }
+
+        // 保存编辑
+        function 保存编辑(索引) {
+            课程数据[索引] = {
+                星期: document.getElementById(`编辑-星期-${索引}`).value,
+                节次: document.getElementById(`编辑-节次-${索引}`).value,
+                班级: document.getElementById(`编辑-班级-${索引}`).value,
+                科目: document.getElementById(`编辑-科目-${索引}`).value,
+                教师: document.getElementById(`编辑-教师-${索引}`).value
+            };
+            
+            保存课程数据();
+            渲染课程列表();
+        }
+
+        // 取消编辑
+        function 取消编辑(索引) {
+            const 编辑表单 = document.getElementById(`编辑表单-${索引}`);
+            编辑表单.style.display = 'none';
+        }
+
+        // 删除课程
+        function 删除课程(索引) {
+            if (confirm('确定要删除这门课程吗？')) {
+                课程数据.splice(索引, 1);
+                保存课程数据();
+                渲染课程列表();
+            }
+        }
+
+        // 重置课程表
+        function 重置课程表() {
+            if (confirm('确定要重置课程表吗？所有修改将被清除！')) {
+                localStorage.removeItem('课程表数据');
+                课程数据 = [
+                    { 星期: '周一', 节次: '第3节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+                    { 星期: '周一', 节次: '第4节（上午）', 班级: '六2', 科目: '音乐', 教师: '薇' },
+                    { 星期: '周二', 节次: '第1节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+                    { 星期: '周二', 节次: '第3节（上午）', 班级: '六1', 科目: '科学', 教师: '薇' },
+                    { 星期: '周三', 节次: '值日', 班级: '', 科目: '值日', 教师: '' },
+                    { 星期: '周三', 节次: '第2节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+                    { 星期: '周三', 节次: '第4节（上午）', 班级: '六1', 科目: '美术', 教师: '薇' },
+                    { 星期: '周三', 节次: '第6节（下午）', 班级: '六1', 科目: '科学', 教师: '薇' },
+                    { 星期: '周四', 节次: '第1节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+                    { 星期: '周四', 节次: '第3节（上午）', 班级: '六1', 科目: '劳动', 教师: '薇' },
+                    { 星期: '周四', 节次: '第5节（下午）', 班级: '六1', 科目: '综合', 教师: '薇' },
+                    { 星期: '周五', 节次: '第2节（上午）', 班级: '六1', 科目: '语文', 教师: '薇' },
+                    { 星期: '周五', 节次: '第5节（下午）', 班级: '六1', 科目: '语文', 教师: '薇' }
+                ];
+                保存课程数据();
+                渲染课程列表();
+            }
+        }
+
+        // 渲染课程表格
+        function 渲染课程表格(筛选星期 = '全部') {
+            当前筛选星期 = 筛选星期;
+            const 课程表格 = document.getElementById('课程表格');
+            
+            // 获取所有节次
+            const 所有节次 = [];
+            课程数据.forEach(课程 => {
+                if (!所有节次.includes(课程.节次)) {
+                    所有节次.push(课程.节次);
+                }
+            });
+            
+            // 排序节次
+            所有节次.sort((a, b) => {
+                const 上午A = a.includes('上午');
+                const 上午B = b.includes('上午');
+                if (上午A && !上午B) return -1;
+                if (!上午A && 上午B) return 1;
+                
+                // 提取数字进行比较
+                const 数字A = parseInt(a.match(/\d+/)[0]);
+                const 数字B = parseInt(b.match(/\d+/)[0]);
+                return 数字A - 数字B;
+            });
+            
+            // 确定要显示的星期
+            const 显示星期 = 筛选星期 === '全部' ? ['周一', '周二', '周三', '周四', '周五'] : [筛选星期];
+            
+            // 创建表格HTML
+            let 表格HTML = `
+                <thead>
+                    <tr>
+                        <th>节次</th>
+            `;
+            
+            // 添加星期表头
+            显示星期.forEach(星期 => {
+                表格HTML += `<th>${星期}</th>`;
+            });
+            
+            表格HTML += `
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            // 添加每行数据
+            所有节次.forEach(节次 => {
+                表格HTML += `<tr>
+                    <td>${节次}</td>`;
+                
+                显示星期.forEach(星期 => {
+                    // 查找该星期该节次的课程
+                    const 课程 = 课程数据.find(c => c.星期 === 星期 && c.节次 === 节次);
+                    
+                    if (课程) {
+                        表格HTML += `
+                            <td class="课程单元格">
+                                <div class="科目标签 ${课程.科目}">${课程.科目}</div>
+                                ${课程.班级 ? `<div class="班级信息">${课程.班级}</div>` : ''}
+                                ${课程.教师 ? `<div class="教师信息">${课程.教师}</div>` : ''}
+                            </td>
+                        `;
+                    } else {
+                        表格HTML += `<td class="空单元格"></td>`;
+                    }
+                });
+                
+                表格HTML += `</tr>`;
+            });
+            
+            表格HTML += `
+                </tbody>
+            `;
+            
+            // 设置表格内容
+            课程表格.innerHTML = 表格HTML;
+        }
+        
+        // 导出课程表
+        function 导出课程表() {
+            const 导出数据 = JSON.stringify(课程数据, null, 2);
+            const 导出blob = new Blob([导出数据], { type: 'application/json' });
+            const 导出链接 = document.createElement('a');
+            导出链接.href = URL.createObjectURL(导出blob);
+            导出链接.download = '我的课程表.json';
+            导出链接.click();
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            加载课程数据();
+            
+            // 添加事件监听器
+            document.getElementById('添加课程').addEventListener('click', function() {
+                if (当前视图 === '表格') {
+                    切换视图('卡片'); // 切换到卡片视图再显示添加表单
+                    setTimeout(显示添加课程表单, 300);
+                } else {
+                    显示添加课程表单();
+                }
+            });
+            document.getElementById('重置课程').addEventListener('click', 重置课程表);
+            document.getElementById('导出课程').addEventListener('click', 导出课程表);
+            
+            // 视图切换按钮
+            document.getElementById('卡片视图').addEventListener('click', function() {
+                切换视图('卡片');
+            });
+            document.getElementById('表格视图').addEventListener('click', function() {
+                切换视图('表格');
+            });
+            
+            // 星期筛选
+            document.querySelectorAll('.星期标签').forEach(标签 => {
+                标签.addEventListener('click', function() {
+                    document.querySelectorAll('.星期标签').forEach(t => t.classList.remove('活跃'));
+                    this.classList.add('活跃');
+                    const 星期 = this.getAttribute('data-星期');
+                    渲染当前视图();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
