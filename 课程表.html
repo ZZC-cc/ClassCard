@@ -65,7 +65,12 @@
             justify-content: space-between;
             margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 20px;
+        }
+        
+        .功能栏 > div {
+            display: flex;
+            gap: 15px;
         }
       
         .按钮 {
@@ -94,6 +99,7 @@
       
         .星期导航 {
             display: flex;
+            flex-wrap: nowrap;
             overflow-x: auto;
             margin-bottom: 20px;
             background: var(--card-bg);
@@ -261,20 +267,169 @@
         }
       
         @media (max-width: 768px) {
-            .课程内容 {
-                grid-template-columns: 1fr;
+            body {
+                padding: 10px;
             }
-          
+            
+            .课程表容器 {
+                max-width: 100%;
+            }
+            
+            .课程表标题 {
+                padding: 15px;
+                border-radius: 8px;
+            }
+            
+            .课程表标题 h1 {
+                font-size: 20px;
+            }
+            
+            .课程表标题 p {
+                font-size: 14px;
+            }
+            
             .功能栏 {
                 flex-direction: column;
+                gap: 8px;
             }
-          
+            
+            .按钮 {
+                padding: 8px 16px;
+                font-size: 14px;
+                width: 100%;
+                text-align: center;
+            }
+            
             .星期导航 {
-                overflow-x: scroll;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin-bottom: 15px;
             }
-          
+            
             .星期标签 {
-                min-width: 100px;
+                min-width: 80px;
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            
+            .课程内容 {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .课程卡片 {
+                padding: 15px;
+            }
+            
+            .课程头 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .操作按钮 {
+                align-self: flex-end;
+            }
+            
+            .课程科目 {
+                font-size: 16px;
+            }
+            
+            .课程信息 {
+                font-size: 14px;
+            }
+            
+            .视图切换 {
+                flex-direction: column;
+                gap: 5px;
+                padding: 10px;
+            }
+            
+            .视图按钮 {
+                width: 100%;
+                margin: 2px 0;
+            }
+            
+            .课程表格容器 {
+                padding: 15px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .课程表格 {
+                min-width: 600px;
+            }
+            
+            .课程表格 th,
+            .课程表格 td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .课程单元格 .科目标签 {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+            
+            .课程单元格 .班级信息,
+            .课程单元格 .教师信息 {
+                font-size: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .课程表标题 h1 {
+                font-size: 18px;
+            }
+            
+            .课程表标题 p {
+                font-size: 12px;
+            }
+            
+            .星期标签 {
+                min-width: 70px;
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            
+            .课程卡片 {
+                padding: 12px;
+            }
+            
+            .课程科目 {
+                font-size: 15px;
+            }
+            
+            .表单组 input, .表单组 select {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            /* 手机端表格适配 */
+            .课程表格容器 {
+                padding: 10px 5px;
+                margin: 0 -5px;
+            }
+            
+            .课程表格 {
+                min-width: 800px; /* 增加最小宽度以适应更多列 */
+                font-size: 11px;
+            }
+            
+            .课程表格 th,
+            .课程表格 td {
+                padding: 6px 4px;
+                font-size: 11px;
+            }
+            
+            .课程单元格 .科目标签 {
+                font-size: 10px;
+                padding: 2px 4px;
+            }
+            
+            .课程单元格 .班级信息,
+            .课程单元格 .教师信息 {
+                font-size: 9px;
             }
         }
       
@@ -406,7 +561,7 @@
         </div>
         
         <div class="星期导航">
-            <div class="星期标签 活跃" data-星期="全部">全部课程</div>
+            <div class="星期标签 活跃" data-星期="全部">全部</div>
             <div class="星期标签" data-星期="周一">周一</div>
             <div class="星期标签" data-星期="周二">周二</div>
             <div class="星期标签" data-星期="周三">周三</div>
@@ -506,6 +661,35 @@
             const 筛选后课程 = 筛选星期 === '全部' 
                 ? 课程数据 
                 : 课程数据.filter(课程 => 课程.星期 === 筛选星期);
+            
+            // 按星期和节次排序
+            筛选后课程.sort((a, b) => {
+                const 星期顺序 = ['周一', '周二', '周三', '周四', '周五'];
+                const 星期索引A = 星期顺序.indexOf(a.星期);
+                const 星期索引B = 星期顺序.indexOf(b.星期);
+                
+                if (星期索引A !== 星期索引B) {
+                    return 星期索引A - 星期索引B;
+                }
+                
+                // 按节次排序
+                const 上午A = a.节次.includes('上午');
+                const 上午B = b.节次.includes('上午');
+                if (上午A && !上午B) return -1;
+                if (!上午A && 上午B) return 1;
+                
+                // 提取数字进行比较，处理没有数字的情况（如'值日'）
+                const 数字A匹配 = a.节次.match(/\d+/);
+                const 数字B匹配 = b.节次.match(/\d+/);
+                
+                if (!数字A匹配 && !数字B匹配) return 0;
+                if (!数字A匹配) return -1;
+                if (!数字B匹配) return 1;
+                
+                const 数字A = parseInt(数字A匹配[0]);
+                const 数字B = parseInt(数字B匹配[0]);
+                return 数字A - 数字B;
+            });
           
             if (筛选后课程.length === 0) {
                 const 空状态 = document.createElement('div');
@@ -733,14 +917,18 @@
                 }
             });
             
-            // 排序节次
+            // 排序节次，值日放在最前面
             所有节次.sort((a, b) => {
+                // 值日永远在最前面
+                if (a === '值日') return -1;
+                if (b === '值日') return 1;
+                
                 const 上午A = a.includes('上午');
                 const 上午B = b.includes('上午');
                 if (上午A && !上午B) return -1;
                 if (!上午A && 上午B) return 1;
                 
-                // 提取数字进行比较，处理没有数字的情况（如'值日'）
+                // 提取数字进行比较
                 const 数字A匹配 = a.match(/\d+/);
                 const 数字B匹配 = b.match(/\d+/);
                 
@@ -854,6 +1042,7 @@
                     document.querySelectorAll('.星期标签').forEach(t => t.classList.remove('活跃'));
                     this.classList.add('活跃');
                     const 星期 = this.getAttribute('data-星期');
+                    当前筛选星期 = 星期;
                     渲染当前视图();
                 });
             });
