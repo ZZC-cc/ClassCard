@@ -740,14 +740,21 @@
                 if (上午A && !上午B) return -1;
                 if (!上午A && 上午B) return 1;
                 
-                // 提取数字进行比较
-                const 数字A = parseInt(a.match(/\d+/)[0]);
-                const 数字B = parseInt(b.match(/\d+/)[0]);
+                // 提取数字进行比较，处理没有数字的情况（如'值日'）
+                const 数字A匹配 = a.match(/\d+/);
+                const 数字B匹配 = b.match(/\d+/);
+                
+                if (!数字A匹配 && !数字B匹配) return 0;
+                if (!数字A匹配) return -1;
+                if (!数字B匹配) return 1;
+                
+                const 数字A = parseInt(数字A匹配[0]);
+                const 数字B = parseInt(数字B匹配[0]);
                 return 数字A - 数字B;
             });
             
             // 确定要显示的星期
-            const 显示星期 = 筛选星期 === '全部' ? ['周一', '周二', '周三', '周四', '周五'] : [筛选星期];
+            const 显示星期 = ['周一', '周二', '周三', '周四', '周五'];
             
             // 创建表格HTML
             let 表格HTML = `
@@ -773,6 +780,12 @@
                     <td>${节次}</td>`;
                 
                 显示星期.forEach(星期 => {
+                    // 如果筛选星期不是'全部'，只显示筛选星期的数据
+                    if (筛选星期 !== '全部' && 星期 !== 筛选星期) {
+                        表格HTML += `<td class="空单元格"></td>`;
+                        return;
+                    }
+                    
                     // 查找该星期该节次的课程
                     const 课程 = 课程数据.find(c => c.星期 === 星期 && c.节次 === 节次);
                     
@@ -813,6 +826,7 @@
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
             加载课程数据();
+            渲染当前视图();
             
             // 添加事件监听器
             document.getElementById('添加课程').addEventListener('click', function() {
